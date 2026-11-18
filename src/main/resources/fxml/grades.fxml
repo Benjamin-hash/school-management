@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.school.controllers.GradeController" spacing="15" style="-fx-padding: 15;">
+
+    <Label text="Grade Management" styleClass="module-title"/>
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <Label text="Class:"/>
+        <ChoiceBox fx:id="classChoice" prefWidth="120"/>
+        <Label text="Subject:"/>
+        <ChoiceBox fx:id="subjectChoice" prefWidth="150"/>
+        <Label fx:id="activeSessionLabel" style="-fx-font-weight: bold; -fx-text-fill: #3498db;"/>
+    </HBox>
+
+    <TableView fx:id="gradeTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colName" text="Student Name" prefWidth="300" editable="false"/>
+            <TableColumn fx:id="colScore" text="Score (0-100)" prefWidth="200"/>
+        </columns>
+        <placeholder>
+            <Label text="Select a class and subject to load students."/>
+        </placeholder>
+    </TableView>
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <Button text="Save Grades" onAction="#handleSave" style="-fx-background-color: #27ae60;"/>
+        <Label fx:id="msgLabel" style="-fx-font-weight: bold;"/>
+    </HBox>
+</VBox>

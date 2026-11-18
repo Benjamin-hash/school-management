@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.school.controllers.LoginController"
+           stylesheets="@../css/style.css" style="-fx-background-color: #f8fafc;">
+
+    <VBox alignment="CENTER" spacing="15.0" maxWidth="350" maxHeight="400"
+          style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 20, 0, 0, 10);">
+
+        <Label text="Welcome Back" styleClass="app-title"/>
+        <Label text="Sign in to continue to your dashboard." styleClass="module-note" style="-fx-padding: 0 0 10 0;"/>
+
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+            <Label text="Username" style="-fx-font-weight: bold; -fx-text-fill: #475569;"/>
+            <TextField fx:id="usernameField" promptText="admin or teacher" maxWidth="Infinity"/>
+        </VBox>
+
+        <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+            <Label text="Password" style="-fx-font-weight: bold; -fx-text-fill: #475569;"/>
+            <PasswordField fx:id="passwordField" promptText="••••••••" onAction="#handleLogin" maxWidth="Infinity"/>
+        </VBox>
+
+        <Label fx:id="errorLabel" styleClass="error-label"/>
+
+        <Button text="Login" onAction="#handleLogin" defaultButton="true" maxWidth="Infinity" style="-fx-padding: 10; -fx-font-size: 14px;"/>
+    </VBox>
+
+</StackPane>

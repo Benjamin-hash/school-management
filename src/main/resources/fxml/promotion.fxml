@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.school.controllers.PromotionController" spacing="10" style="-fx-padding: 10;">
+
+    <Label text="Student Promotion" styleClass="module-title"/>
+    <Label text="Uncheck a student to mark them as a repeater. They will remain in this class." styleClass="module-note"/>
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <Label text="Current Class:"/>
+        <ChoiceBox fx:id="classChoice" prefWidth="150"/>
+        <Label fx:id="targetClassLabel" style="-fx-font-size: 14px;"/>
+    </HBox>
+
+    <TableView fx:id="studentTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colCheck" text="Promote?" prefWidth="100" editable="true"/>
+            <TableColumn fx:id="colName" text="Student Name" prefWidth="300" editable="false"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <Button text="Execute Promotion" onAction="#handlePromote" style="-fx-background-color: #27ae60;"/>
+        <Label fx:id="msgLabel" style="-fx-font-weight: bold;"/>
+    </HBox>
+</VBox>

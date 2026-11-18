@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox alignment="CENTER" spacing="15.0" stylesheets="@../css/style.css"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.school.controllers.ActivationController">
+    <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
+
+    <Label text="System Locked" styleClass="app-title" style="-fx-text-fill: #e74c3c;"/>
+    <Label fx:id="statusLabel" style="-fx-font-size: 14px;"/>
+
+    <GridPane hgap="10" vgap="10" alignment="CENTER">
+        <Label text="License Key:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="licenseField" promptText="TRM-XXXX or YEA-XXXX" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="200"/>
+    </GridPane>
+
+    <Label fx:id="errorLabel" styleClass="error-label"/>
+    <Button text="Activate License" onAction="#handleActivate" maxWidth="Infinity"/>
+
+    <Separator/>
+
+    <Label text="Don't have a license key?" style="-fx-font-size: 14px; -fx-text-fill: #475569;"/>
+    <Button text="Buy License via Paystack" onAction="#handlePaystack" style="-fx-background-color: #3498db; -fx-font-weight: bold;" maxWidth="Infinity"/>
+    <Label text="(We offer Term, Yearly, and Lifetime subscriptions)" style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;"/>
+
+    <!-- TRIAL BUTTON (Will be hidden if trial is dead) -->
+    <Button fx:id="trialButton" text="Don't have a key? Start 8-Month Free Trial"
+            onAction="#handleStartTrial"
+            style="-fx-background-color: transparent; -fx-text-fill: #3b82f6; -fx-underline: true;"/>
+    <Label fx:id="codeRevealLabel"/>
+</VBox>

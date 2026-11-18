@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.school.controllers.DashboardController"
+            stylesheets="@../css/style.css" styleClass="root">
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="topbar">
+            <padding>
+                <Insets top="10" right="15" bottom="10" left="15"/>
+            </padding>
+            <Label text="Greenfield High School" styleClass="welcome-label"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="welcomeLabel" styleClass="welcome-label"/>
+            <!-- NEW LOGOUT BUTTON -->
+            <Button text="Logout" onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-font-size: 12px; -fx-padding: 6 12 6 12;"/>
+        </HBox>
+    </top>
+    <left>
+        <VBox fx:id="menuBox" spacing="4" styleClass="sidebar" minWidth="220" maxWidth="220">
+            <padding>
+                <Insets top="16" right="8" bottom="16" left="8"/>
+            </padding>
+        </VBox>
+    </left>
+    <center>
+        <BorderPane fx:id="contentArea">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+        </BorderPane>
+    </center>
+</BorderPane>

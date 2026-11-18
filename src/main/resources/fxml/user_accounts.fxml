@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.school.controllers.UserAccountController" spacing="10" style="-fx-padding: 10;">
+
+    <Label text="User Accounts" styleClass="module-title"/>
+    <Label text="Manage system logins. Teachers are created automatically from the Teachers screen." styleClass="module-note"/>
+
+    <TableView fx:id="userTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colUsername" text="Username" prefWidth="250"/>
+            <TableColumn fx:id="colRole" text="Role" prefWidth="150"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+        <Button text="Reset Selected Password" onAction="#handleResetPassword" style="-fx-background-color: #e67e22;"/>
+    </HBox>
+
+    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0; -fx-border-color: #e2e8f0; -fx-border-width: 1 0 0 0;">
+        <Label text="Create New Admin:"/>
+        <TextField fx:id="newUserField" promptText="Username" prefWidth="150"/>
+        <PasswordField fx:id="newPassField" promptText="Password" prefWidth="150"/>
+        <Button text="Create Admin" onAction="#handleCreateAdmin" style="-fx-background-color: #3498db;"/>
+        <Label fx:id="msgLabel" style="-fx-font-weight: bold;"/>
+    </HBox>
+</VBox>

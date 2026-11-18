@@ -1,0 +1,160 @@
+/* =========================================
+   ULTIMATE MODERN UI THEME (Bulletproof)
+   ========================================= */
+
+.root {
+    -fx-font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: #f8fafc;
+}
+
+/* =========================================
+   TYPOGRAPHY
+   ========================================= */
+.app-title { -fx-font-size: 24px; -fx-font-weight: 800; -fx-text-fill: #0f172a; }
+.module-title { -fx-font-size: 22px; -fx-font-weight: 700; -fx-text-fill: #1e293b; }
+.module-note { -fx-font-size: 13px; -fx-text-fill: #64748b; }
+.error-label { -fx-text-fill: #ef4444; -fx-font-weight: bold; }
+
+/* =========================================
+   SIDEBAR & NAVIGATION
+   ========================================= */
+.sidebar {
+    -fx-background-color: #0f172a;
+    -fx-padding: 10;
+}
+
+.menu-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94a3b8;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 12 16 12 16;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+.menu-btn:hover {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #ffffff;
+}
+.menu-btn.active {
+    -fx-background-color: #3b82f6;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
+/* =========================================
+   TOPBAR
+   ========================================= */
+.topbar {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 4);
+    -fx-padding: 15;
+}
+.welcome-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #1e293b;
+}
+
+/* =========================================
+   BUTTONS & INPUTS
+   ========================================= */
+.button {
+    -fx-background-color: #3b82f6;
+    -fx-text-fill: white;
+    -fx-padding: 8 16 8 16;
+    -fx-background-radius: 6;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+}
+.button:hover { -fx-background-color: #2563eb; }
+
+.text-field, .password-field, .choice-box, .date-picker {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8;
+    -fx-text-fill: #0f172a;
+}
+.text-field:focused, .password-field:focused, .choice-box:focused {
+    -fx-border-color: #3b82f6;
+    -fx-border-width: 2;
+}
+
+/* =========================================
+   TABLES (The Master Fix)
+   ========================================= */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+/* The header background */
+.table-view .column-header-background {
+    -fx-background-color: #f1f5f9;
+    -fx-background-radius: 8 8 0 0;
+}
+
+/* Fixes the weird cyan filler block at the end of the headers */
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+/* The actual column headers */
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-size: 45px;
+    -fx-border-color: transparent transparent #cbd5e1 transparent;
+}
+
+/* Header Text */
+.table-view .column-header .label {
+    -fx-text-fill: #475569 !important;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 0 0 10;
+}
+
+/* Table Rows */
+.table-row-cell {
+    -fx-cell-size: 45px;
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #f1f5f9 transparent;
+}
+.table-row-cell:odd {
+    -fx-background-color: #f8fafc;
+}
+.table-row-cell:selected {
+    -fx-background-color: #eff6ff; /* Soft blue background */
+}
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: #1e293b; /* Dark text on selected row */
+    -fx-font-weight: bold;
+}
+
+/* =========================================
+   CLASS CARDS & SCROLLBARS
+   ========================================= */
+.class-card {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+    -fx-min-width: 160;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 8, 0, 0, 2);
+}
+.class-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 12, 0, 0, 4);
+    -fx-border-color: #cbd5e1;
+}
+.class-card-name { -fx-font-size: 20px; -fx-font-weight: 800; -fx-text-fill: #1e293b; }
+
+.scroll-bar:vertical, .scroll-bar:horizontal { -fx-background-color: transparent; }
+.scroll-bar:vertical .thumb, .scroll-bar:horizontal .thumb { -fx-background-color: #cbd5e1; -fx-background-radius: 10; }
+.scroll-bar .increment-button, .scroll-bar .decrement-button { -fx-background-color: transparent; -fx-padding: 0; }

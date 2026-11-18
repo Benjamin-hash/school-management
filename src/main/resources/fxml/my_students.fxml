@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.school.controllers.MyStudentsController" spacing="10" style="-fx-padding: 10;">
+    <Label text="My Students" styleClass="module-title"/>
+    <Label text="Students enrolled in classes assigned to you." styleClass="module-note"/>
+
+    <TableView fx:id="studentTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colFirstName" text="First Name" prefWidth="150"/>
+            <TableColumn fx:id="colLastName" text="Last Name" prefWidth="150"/>
+            <TableColumn fx:id="colClassName" text="Class" prefWidth="100"/>
+        </columns>
+    </TableView>
+</VBox>

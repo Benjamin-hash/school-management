@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.school.controllers.ReportCardController" spacing="15" style="-fx-padding: 20;">
+
+    <Label text="Student Report Card" styleClass="module-title"/>
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <Label text="Class:"/>
+        <ChoiceBox fx:id="classChoice" prefWidth="120"/>
+        <Label text="Student:"/>
+        <ChoiceBox fx:id="studentChoice" prefWidth="200"/>
+        <Button text="Print Report Card" onAction="#handlePrint" style="-fx-background-color: #3498db;"/>
+    </HBox>
+
+    <!-- PRINTABLE AREA -->
+    <VBox fx:id="printArea" spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-border-color: #cbd5e1; -fx-border-radius: 8;">
+        <Label text="Greenfield High School" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+        <Label fx:id="sessionLabel" style="-fx-font-size: 14px; -fx-text-fill: #64748b;"/>
+        <Separator/>
+
+        <!-- NEW: STUDENT NAME & ATTENDANCE ROW -->
+        <HBox spacing="30" alignment="CENTER_LEFT">
+            <Label fx:id="studentNameLabel" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
+            <Label fx:id="attendanceLabel" style="-fx-font-size: 14px; -fx-text-fill: #64748b; -fx-font-weight: bold;"/>
+        </HBox>
+
+        <TableView fx:id="reportTable" prefHeight="300">
+            <columns>
+                <TableColumn fx:id="colSubject" text="Subject" prefWidth="250"/>
+                <TableColumn fx:id="colScore" text="Score" prefWidth="100"/>
+                <TableColumn fx:id="colGrade" text="Grade" prefWidth="100"/>
+            </columns>
+        </TableView>
+
+        <HBox spacing="30" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+            <Label fx:id="totalScoreLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <Label fx:id="averageLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+        </HBox>
+    </VBox>
+</VBox>

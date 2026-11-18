@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.school.controllers.FeeStructureController" spacing="10" style="-fx-padding: 10;">
+
+    <Label text="Fee Allocation Setup" styleClass="module-title"/>
+    <Label text="Set the fee amounts per class level and term. When you generate bills, these amounts will be used." styleClass="module-note"/>
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <Label text="Class Level:"/>
+        <ChoiceBox fx:id="levelChoice" prefWidth="120"/>
+
+        <Label text="Term:"/>
+        <ChoiceBox fx:id="termChoice" prefWidth="80"/>
+
+        <Label text="Amount:"/>
+        <TextField fx:id="amountField" promptText="e.g. 200" prefWidth="100"/>
+
+        <Button text="Save Fee Setup" onAction="#handleSave"/>
+        <Label fx:id="msgLabel" style="-fx-font-weight: bold;"/>
+    </HBox>
+
+    <TableView fx:id="feeTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colLevel" text="Class Level" prefWidth="200"/>
+            <TableColumn fx:id="colTerm" text="Term" prefWidth="150"/>
+            <TableColumn fx:id="colAmount" text="Amount ($)" prefWidth="150"/>
+        </columns>
+    </TableView>
+</VBox>

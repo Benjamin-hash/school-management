@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.school.controllers.HomeroomController" spacing="15" style="-fx-padding: 20;">
+
+    <Label text="Homeroom Teacher Assignment" styleClass="module-title"/>
+    <Label text="Perfect for Primary, Nursery, and KG. Assigning a Homeroom Teacher automatically gives them access to grade ALL subjects for that class." styleClass="module-note"/>
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <Label text="Select Class:"/>
+        <ChoiceBox fx:id="classChoice" prefWidth="150"/>
+
+        <Label text="Select Teacher:"/>
+        <ChoiceBox fx:id="teacherChoice" prefWidth="200"/>
+
+        <Button text="Assign Homeroom Teacher" onAction="#handleSave" style="-fx-background-color: #8e44ad;"/>
+    </HBox>
+
+    <Label fx:id="msgLabel" style="-fx-font-weight: bold;"/>
+
+    <TableView fx:id="homeroomTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colClass" text="Class Name" prefWidth="250"/>
+            <TableColumn fx:id="colTeacher" text="Homeroom Teacher" prefWidth="300"/>
+        </columns>
+    </TableView>
+</VBox>
