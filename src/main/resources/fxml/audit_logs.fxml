@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.school.controllers.AuditController" spacing="10" style="-fx-padding: 20;">
+    <Label text="System Audit Logs" styleClass="module-title"/>
+    <Label text="A secure record of all critical actions taken in the system." styleClass="module-note"/>
+    <TableView fx:id="auditTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colTime" text="Timestamp" prefWidth="150"/>
+            <TableColumn fx:id="colUser" text="User" prefWidth="150"/>
+            <TableColumn fx:id="colAction" text="Action" prefWidth="150"/>
+            <TableColumn fx:id="colDetails" text="Details" prefWidth="400"/>
+        </columns>
+    </TableView>
+</VBox>

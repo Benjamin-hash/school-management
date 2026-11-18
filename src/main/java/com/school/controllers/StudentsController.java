@@ -6,6 +6,7 @@ import com.school.models.SchoolClass;
 import com.school.models.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import com.school.models.SchoolClass;
@@ -20,7 +21,9 @@ public class StudentsController {
     @FXML private TextField firstNameField, lastNameField, emailField, phoneField, dobField;
     @FXML private ChoiceBox<SchoolClass> classChoice;
 
+    @FXML private TextField searchField;
     private ObservableList<Student> studentList = FXCollections.observableArrayList();
+    private FilteredList<Student> filteredList;
 
     @FXML
     private void initialize() {
@@ -30,6 +33,21 @@ public class StudentsController {
 
         studentTable.setItems(studentList);
         classChoice.setItems(FXCollections.observableArrayList(ClassDAO.getAll()));
+
+        filteredList = new FilteredList<>(studentList, p -> true);
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredList.setPredicate(student -> {
+                if (newValue == null || newValue.isEmpty()) return true;
+                String lowerCaseFilter = newValue.toLowerCase();
+                if (student.getFirstName().toLowerCase().contains(lowerCaseFilter)) return true;
+                if (student.getLastName().toLowerCase().contains(lowerCaseFilter)) return true;
+                if (student.getEmail() != null && student.getEmail().toLowerCase().contains(lowerCaseFilter)) return true;
+                return false;
+            });
+        });
+
+        // Use the filtered list for the table
+        studentTable.setItems(filteredList);
         refreshTable();
 
         studentTable.getSelectionModel().selectedItemProperty().addListener(

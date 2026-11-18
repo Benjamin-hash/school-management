@@ -45,6 +45,8 @@ public class GradeDAO {
             ps.setString(4, year);
             ps.setDouble(5, score);
             ps.setInt(6, enteredBy);
+            // Add this inside saveGrade (assuming you pass user ID):
+            AuditDAO.log(enteredBy, "GRADE_UPDATE", "Updated grade for Student ID " + studentId + " to " + score);
             ps.executeUpdate();
         } catch (SQLException e) { e.printStackTrace(); }
     }

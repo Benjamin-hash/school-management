@@ -3,6 +3,12 @@
 <?import javafx.scene.layout.*?>
 <VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.school.controllers.StudentsController" spacing="10" style="-fx-padding: 10;">
+
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 10 0;">
+        <Label text="Search Student:" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="searchField" promptText="Type name or email..." prefWidth="300"/>
+    </HBox>
+
     <TableView fx:id="studentTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="colFirstName" text="First Name" prefWidth="150"/>

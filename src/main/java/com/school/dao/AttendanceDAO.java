@@ -72,4 +72,21 @@ public class AttendanceDAO {
 
         return "Present: " + present + " | Absent: " + absent + " | Late: " + late;
     }
+
+    public static int[] getSchoolAttendanceStats() {
+        int[] stats = new int[3]; // [Present, Absent, Late]
+        String sql = "SELECT status, COUNT(*) as count FROM attendance GROUP BY status";
+        try (Connection conn = Database.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                String status = rs.getString("status");
+                int count = rs.getInt("count");
+                if ("PRESENT".equals(status)) stats[0] = count;
+                else if ("ABSENT".equals(status)) stats[1] = count;
+                else if ("LATE".equals(status)) stats[2] = count;
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return stats;
+    }
 }

@@ -11,8 +11,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 
 import java.io.IOException;
 
@@ -64,6 +70,7 @@ public class DashboardController {
 
             addMenuItem("Settings", () -> loadView("/fxml/settings.fxml", null));
             addMenuItem("User accounts", () -> loadView("/fxml/user_accounts.fxml", null));
+            addMenuItem("Audit Logs", () -> loadView("/fxml/audit_logs.fxml", null));
         } else {
             addMenuItem("My students", this::showMyStudents);
             addMenuItem("Attendance", this::showAttendance);
@@ -175,12 +182,39 @@ public class DashboardController {
             cards.getChildren().addAll(
                     createStatCard("Active Students", String.valueOf(totalStudents), "#3498db"),
                     createStatCard("Total Teachers", String.valueOf(totalTeachers), "#9b59b6"),
-                    createStatCard("Active Classes", String.valueOf(totalClasses), "#e67e22"),
-
-                    createStatCard("Term Billed", "$" + String.format("%.2f", billed), "#475569"),
-                    createStatCard("Term Collected", "$" + String.format("%.2f", collected), "#27ae60"),
-                    createStatCard("Outstanding", "$" + String.format("%.2f", outstanding), "#e74c3c")
+                    createStatCard("Active Classes", String.valueOf(totalClasses), "#e67e22")
             );
+
+            // --- NEW CHARTS ---
+            HBox chartsBox = new HBox(20);
+            chartsBox.setPadding(new javafx.geometry.Insets(20, 0, 0, 0));
+
+            // 1. Fee Pie Chart
+            PieChart feeChart = new PieChart();
+            feeChart.setTitle("Term Fee Collection");
+            feeChart.getData().add(new PieChart.Data("Collected ($" + (int)collected + ")", collected));
+            feeChart.getData().add(new PieChart.Data("Outstanding ($" + (int)outstanding + ")", outstanding));
+            feeChart.setPrefWidth(400);
+
+            // 2. Attendance Bar Chart (School-wide for current term)
+            CategoryAxis xAxis = new CategoryAxis();
+            NumberAxis yAxis = new NumberAxis();
+            BarChart<String, Number> attendanceChart = new BarChart<>(xAxis, yAxis);
+            attendanceChart.setTitle("School Attendance Overview");
+            attendanceChart.setLegendVisible(false);
+            attendanceChart.setPrefWidth(500);
+
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            // We need a quick DAO method for this (See Step 1 below)
+            int[] attStats = com.school.dao.AttendanceDAO.getSchoolAttendanceStats();
+            series.getData().add(new XYChart.Data<>("Present", attStats[0]));
+            series.getData().add(new XYChart.Data<>("Absent", attStats[1]));
+            series.getData().add(new XYChart.Data<>("Late", attStats[2]));
+            attendanceChart.getData().add(series);
+
+            chartsBox.getChildren().addAll(feeChart, attendanceChart);
+
+            contentArea.setCenter(new VBox(15, heading, sessionLabel, cards, chartsBox));
 
             contentArea.setCenter(new VBox(15, heading, sessionLabel, cards));
 

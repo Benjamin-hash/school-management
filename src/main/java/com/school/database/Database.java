@@ -134,6 +134,14 @@ public class Database {
                     + "subscription_end_date TEXT,"
                     + "last_run_date TEXT NOT NULL)");
 
+
+            st.execute("CREATE TABLE IF NOT EXISTS audit_logs ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "user_id INTEGER,"
+                    + "action TEXT NOT NULL,"
+                    + "details TEXT NOT NULL,"
+                    + "timestamp TEXT DEFAULT (datetime('now', 'localtime')))");
+
             seed(conn);
         } catch (SQLException e) {
             throw new RuntimeException("Failed to initialize database", e);
