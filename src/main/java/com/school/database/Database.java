@@ -10,10 +10,10 @@ import java.sql.Statement;
 public class Database {
 
     // Change this line:
-    // private static final String URL = "jdbc:sqlite:school.db";
+     private static final String URL = "jdbc:sqlite:school.db";
 
     // To this (Saves safely in the User's folder):
-    private static final String URL = "jdbc:sqlite:" + System.getProperty("user.home") + java.io.File.separator + "school.db";
+  //  private static final String URL = "jdbc:sqlite:" + System.getProperty("user.home") + java.io.File.separator + "school.db";
     private static Connection connection;
 
     public static Connection getConnection() throws SQLException {
@@ -232,10 +232,14 @@ public class Database {
         }
     }
 
-    private static void insertUser(Connection conn, String username, String password, String role, Integer teacherId) throws SQLException {
+    private static void insertUser(Connection conn, String username, String plainPassword,
+                                   String role, Integer teacherId) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
                 "INSERT INTO users (username, password, role, teacher_id) VALUES (?, ?, ?, ?)")) {
-            ps.setString(1, username); ps.setString(2, password); ps.setString(3, role);
+            ps.setString(1, username);
+            // MUST HASH THE PASSWORD HERE
+            ps.setString(2, com.school.utils.PasswordUtils.hashPassword(plainPassword));
+            ps.setString(3, role);
             if (teacherId == null) ps.setNull(4, java.sql.Types.INTEGER);
             else ps.setInt(4, teacherId);
             ps.executeUpdate();

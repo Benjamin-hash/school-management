@@ -145,4 +145,21 @@ public class ClassDAO {
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
     }
+    public static List<SchoolClass> getSecondaryClasses() {
+        List<SchoolClass> list = new ArrayList<>();
+        // Filter to only show JHS and SS classes
+        String sql = "SELECT id, name, level, section, level_order, homeroom_teacher_id FROM classes " +
+                "WHERE level LIKE '%JHS%' OR level LIKE '%SS%' ORDER BY level_order, section";
+        try (Connection conn = Database.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                int hrId = rs.getInt("homeroom_teacher_id");
+                Integer homeroomId = rs.wasNull() ? null : hrId;
+                list.add(new SchoolClass(rs.getInt("id"), rs.getString("name"), rs.getString("level"),
+                        rs.getString("section"), rs.getInt("level_order"), 0, homeroomId));
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return list;
+    }
 }

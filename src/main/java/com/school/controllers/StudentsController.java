@@ -91,24 +91,41 @@ public class StudentsController {
             return;
         }
 
-        // Fetch all classes for the dropdown
-        List<SchoolClass> allClasses = ClassDAO.getAll();
-        if (allClasses.isEmpty()) {
-            showAlert("No Classes", "You haven't created any classes yet.");
+        // 1. Figure out the student's current level category
+        SchoolClass currentClass = ClassDAO.getAll().stream()
+                .filter(c -> c.getId() == selected.getClassId())
+                .findFirst().orElse(null);
+
+        if (currentClass == null) {
+            showAlert("Error", "Student is not assigned to a valid class.");
             return;
         }
 
-        // Create a ChoiceDialog
-        ChoiceDialog<SchoolClass> dialog = new ChoiceDialog<>(allClasses.get(0), allClasses);
+        boolean isJhs = currentClass.getLevel().contains("JHS") || currentClass.getLevel().contains("SS");
+
+        // 2. Filter the available classes
+        List<SchoolClass> allowedClasses = ClassDAO.getAll().stream()
+                .filter(c -> {
+                    boolean classIsJhs = c.getLevel().contains("JHS") || c.getLevel().contains("SS");
+                    return isJhs == classIsJhs; // Match JHS with JHS, Primary with Primary
+                })
+                .toList();
+
+        if (allowedClasses.isEmpty()) {
+            showAlert("No Classes", "No valid classes found for this student's level.");
+            return;
+        }
+
+        // 3. Show the ChoiceDialog
+        ChoiceDialog<SchoolClass> dialog = new ChoiceDialog<>(allowedClasses.get(0), allowedClasses);
         dialog.setTitle("Transfer Student");
-        dialog.setHeaderText("Transferring: " + selected.getFirstName() + " " + selected.getLastName());
+        dialog.setHeaderText("Transferring: " + selected.getFirstName() + " " + selected.getLastName() + " (Current: " + currentClass.getName() + ")");
         dialog.setContentText("Select New Class:");
 
-        // Show dialog and handle the result
         dialog.showAndWait().ifPresent(newClass -> {
             if (newClass.getId() != selected.getClassId()) {
                 StudentDAO.transferClass(selected.getId(), newClass.getId());
-                refreshTable(); // Update the UI
+                refreshTable();
                 showAlert("Success", selected.getFirstName() + " has been transferred to " + newClass.getName() + ".");
             }
         });

@@ -61,10 +61,17 @@ public class FeeController {
 
         int term = SettingsDAO.getActiveTerm();
         String year = SettingsDAO.getActiveYear();
-        FeeDAO.generateBillsForClass(c.getId(), term, year);
+        int generated = FeeDAO.generateBillsForClass(c.getId(), term, year);
+
         loadFees();
-        msgLabel.setText("Bills generated for " + c.getName() + "!");
-        msgLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
+
+        if (generated > 0) {
+            msgLabel.setText("Bills generated for " + c.getName() + "!");
+            msgLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
+        } else {
+            msgLabel.setText("No bills generated. Please ensure students exist and Fee Setup is configured for " + c.getLevel());
+            msgLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+        }
     }
 
     @FXML
