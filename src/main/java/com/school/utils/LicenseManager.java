@@ -14,6 +14,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+
+
 public class LicenseManager {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -146,36 +148,61 @@ public class LicenseManager {
     }
 
     // --- UPDATED: Lifetime Logic Added ---
-    public static boolean activateLicense(String key) {
-        if (key == null || key.length() < 5) return false;
-        LocalDate today = LocalDate.now();
-        LocalDate newExpiry = today;
+    // PASTE THE EXACT SAME SECRET KEY YOU USED IN THE GENERATOR
+    private static final String SECRET_KEY = "KiTechs/";
 
-        if (key.startsWith("TRM-")) {
-            newExpiry = today.plusMonths(4);
-        } else if (key.startsWith("YEA-")) {
-            newExpiry = today.plusYears(1);
-        } else if (key.startsWith("LIF-")) {
-            newExpiry = LocalDate.of(2099, 12, 31); // Lifetime
-        } else {
+    public static boolean activateLicense(String key) {
+        if (key == null || key.length() < 10) return false;
+
+        try {
+            // Split the key into parts: [PLAN] - [EXPIRY] - [HASH]
+            String[] parts = key.split("-");
+            if (parts.length != 3) return false;
+
+            String plan = parts[0];
+            String expiryDateStr = parts[1];
+            String providedHash = parts[2];
+
+            // Verify the plan type
+            if (!plan.equals("TRM") && !plan.equals("YEA") && !plan.equals("LIF")) return false;
+
+            // Re-generate the hash to verify it matches
+            String rawData = plan + "-" + expiryDateStr + "-" + SECRET_KEY;
+            String expectedHash = generateHash(rawData).substring(0, 6).toUpperCase();
+
+            // If the hash matches, the key is legitimate!
+            if (providedHash.equals(expectedHash)) {
+                // Convert the YYYYMMDD string into a real date
+                LocalDate newExpiry = LocalDate.parse(expiryDateStr, DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+                try (Connection conn = Database.getConnection();
+                     PreparedStatement ps = conn.prepareStatement("UPDATE license_info SET license_key = ?, subscription_end_date = ?, trial_end_date = NULL WHERE id = 1")) {
+                    ps.setString(1, key);
+                    ps.setString(2, newExpiry.format(FORMATTER));
+                    ps.executeUpdate();
+                    return true;
+                }
+            }
+        } catch (Exception e) {
             return false;
         }
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement ps = conn.prepareStatement("UPDATE license_info SET license_key = ?, subscription_end_date = ?, trial_end_date = NULL WHERE id = 1")) {
-            ps.setString(1, key);
-            ps.setString(2, newExpiry.format(FORMATTER));
-            ps.executeUpdate();
-            return true;
-        } catch (Exception e) { return false; }
+        return false;
     }
 
-    public static boolean isTrialActivated() {
-        try (Connection conn = Database.getConnection();
-             PreparedStatement ps = conn.prepareStatement("SELECT is_trial_active FROM license_info WHERE id = 1")) {
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1) == 1;
-        } catch (Exception e) {}
-        return false;
+    // Helper to generate the SHA-256 hash
+    private static String generateHash(String input) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            return "ERROR";
+        }
     }
 }

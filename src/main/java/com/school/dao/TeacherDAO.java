@@ -2,6 +2,7 @@ package com.school.dao;
 
 import com.school.database.Database;
 import com.school.models.SchoolClass;
+import com.school.utils.PasswordUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class TeacherDAO {
                 if (keys.next()) teacherId = keys.getInt(1);
 
                 try (java.sql.PreparedStatement psU = conn.prepareStatement(sqlUser)) {
-                    psU.setString(1, username); psU.setString(2, password); psU.setInt(3, teacherId);
+                    psU.setString(1, username); psU.setString(2, com.school.utils.PasswordUtils.hashPassword(password)); psU.setInt(3, teacherId);
                     psU.executeUpdate();
                 }
                 conn.commit(); // Save both

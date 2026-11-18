@@ -28,7 +28,7 @@ public class ClassSubjectController {
         colTeacher.setCellValueFactory(cd -> new javafx.beans.property.SimpleStringProperty(cd.getValue().getTeacherName()));
 
         mapTable.setItems(list);
-        classChoice.setItems(FXCollections.observableArrayList(ClassDAO.getAll()));
+        classChoice.setItems(FXCollections.observableArrayList(ClassDAO.getSecondaryClasses()));
         subjectChoice.setItems(FXCollections.observableArrayList(SubjectDAO.getAll()));
 
         // NOTE: Teacher class needs a toString() method returning their name for this to display correctly!

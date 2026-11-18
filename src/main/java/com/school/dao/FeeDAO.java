@@ -9,7 +9,7 @@ import java.util.List;
 public class FeeDAO {
 
     // 1. Generate bills for the whole class based on the fee_structures table
-    public static void generateBillsForClass(int classId, int term, String year) {
+    public static int generateBillsForClass(int classId, int term, String year) {
         String sql = "INSERT OR IGNORE INTO fees (student_id, term, academic_year, amount_due, status) " +
                 "SELECT s.id, ?, ?, fs.amount, 'UNPAID' " +
                 "FROM students s " +
@@ -22,8 +22,8 @@ public class FeeDAO {
             ps.setString(2, year);
             ps.setInt(3, term);
             ps.setInt(4, classId);
-            ps.executeUpdate();
-        } catch (SQLException e) { e.printStackTrace(); }
+            return ps.executeUpdate(); // Returns how many bills were created
+        } catch (SQLException e) { e.printStackTrace(); return 0; }
     }
 
     // 2. Get fees and calculate total paid so far (handles installments)

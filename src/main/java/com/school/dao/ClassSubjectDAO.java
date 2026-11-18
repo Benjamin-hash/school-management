@@ -92,4 +92,21 @@ public class ClassSubjectDAO {
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
     }
+    public static List<String> getAssignmentsForTeacher(int teacherId) {
+        List<String> assignments = new ArrayList<>();
+        String sql = "SELECT c.name AS class_name, s.name AS subject_name " +
+                "FROM class_subjects cs " +
+                "JOIN classes c ON c.id = cs.class_id " +
+                "JOIN subjects s ON s.id = cs.subject_id " +
+                "WHERE cs.teacher_id = ?";
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, teacherId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                assignments.add(rs.getString("class_name") + "  →  " + rs.getString("subject_name"));
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return assignments;
+    }
 }
