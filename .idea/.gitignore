@@ -8,3 +8,27 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+# Maven Target Folder (NEVER upload compiled files)
+target/
+
+# Local Databases (NEVER upload user data)
+*.db
+*.sqlite
+*.sqlite3
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Local License Lock File
+.school_mgmt_trial
+
+# Mac OS & Windows system files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
