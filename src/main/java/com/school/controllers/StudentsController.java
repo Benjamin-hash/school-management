@@ -4,6 +4,7 @@ import com.school.dao.ClassDAO;
 import com.school.dao.StudentDAO;
 import com.school.models.SchoolClass;
 import com.school.models.Student;
+import com.school.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -24,6 +25,9 @@ public class StudentsController {
     @FXML private TextField searchField;
     private ObservableList<Student> studentList = FXCollections.observableArrayList();
     private FilteredList<Student> filteredList;
+
+    private User currentUser;
+    public void setCurrentUser(User user) { this.currentUser = user; }
 
     @FXML
     private void initialize() {
@@ -66,18 +70,43 @@ public class StudentsController {
     }
 
     @FXML private void handleAdd() {
+        try {
+            String name = firstNameField.getText().trim();
+            String lname = lastNameField.getText().trim();
+            if (name.isEmpty() || lname.isEmpty()) return;
+
         Student s = new Student(0, firstNameField.getText(), lastNameField.getText(),
                 emailField.getText(), phoneField.getText(), dobField.getText(),
                 classChoice.getValue() != null ? classChoice.getValue().getId() : null,
                 null, null, "active");
         StudentDAO.insert(s);
-        refreshTable();
-        handleClear();
+            if (currentUser != null) {
+                com.school.dao.AuditDAO.log(currentUser.getId(), "STUDENT_ADMIT",
+                        "Admitted new student: " + name + " " + lname);
+            }
+
+            refreshTable();
+            handleClear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @FXML private void handleUpdate() {
         Student selected = studentTable.getSelectionModel().getSelectedItem();
         if (selected == null) return;
+
+        if (StudentDAO.delete(selected.getId())) {
+            // --- AUDIT LOG ---
+            if (currentUser != null) {
+                com.school.dao.AuditDAO.log(currentUser.getId(), "STUDENT_DELETE",
+                        "Deleted student: " + selected.getFirstName() + " " + selected.getLastName() + " (ID: " + selected.getId() + ")");
+            }
+            refreshTable();
+        }
+
+
         selected.setFirstName(firstNameField.getText());
         selected.setLastName(lastNameField.getText());
         selected.setEmail(emailField.getText());
@@ -119,6 +148,12 @@ public class StudentsController {
             return;
         }
 
+        List<SchoolClass> allClasses = ClassDAO.getAll();
+        if (allClasses.isEmpty()) {
+            showAlert("No Classes", "You haven't created any classes yet.");
+            return;
+        }
+
         boolean isJhs = currentClass.getLevel().contains("JHS") || currentClass.getLevel().contains("SS");
 
         // 2. Filter the available classes
@@ -135,14 +170,21 @@ public class StudentsController {
         }
 
         // 3. Show the ChoiceDialog
-        ChoiceDialog<SchoolClass> dialog = new ChoiceDialog<>(allowedClasses.get(0), allowedClasses);
+        ChoiceDialog<SchoolClass> dialog = new ChoiceDialog<>(allClasses.get(0), allClasses);
         dialog.setTitle("Transfer Student");
-        dialog.setHeaderText("Transferring: " + selected.getFirstName() + " " + selected.getLastName() + " (Current: " + currentClass.getName() + ")");
+        dialog.setHeaderText("Transferring: " + selected.getFirstName() + " " + selected.getLastName());
         dialog.setContentText("Select New Class:");
 
         dialog.showAndWait().ifPresent(newClass -> {
             if (newClass.getId() != selected.getClassId()) {
                 StudentDAO.transferClass(selected.getId(), newClass.getId());
+
+                // --- AUDIT LOG ---
+                if (currentUser != null) {
+                    com.school.dao.AuditDAO.log(currentUser.getId(), "STUDENT_TRANSFER",
+                            "Transferred " + selected.getFirstName() + " " + selected.getLastName() + " to " + newClass.getName());
+                }
+
                 refreshTable();
                 showAlert("Success", selected.getFirstName() + " has been transferred to " + newClass.getName() + ".");
             }

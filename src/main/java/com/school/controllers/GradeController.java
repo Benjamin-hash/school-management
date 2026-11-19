@@ -20,14 +20,21 @@ import javafx.util.converter.DoubleStringConverter;
 
 public class GradeController {
 
-    @FXML private ChoiceBox<SchoolClass> classChoice;
-    @FXML private ChoiceBox<Subject> subjectChoice;
-    @FXML private Label activeSessionLabel;
-    @FXML private Label msgLabel;
+    @FXML
+    private ChoiceBox<SchoolClass> classChoice;
+    @FXML
+    private ChoiceBox<Subject> subjectChoice;
+    @FXML
+    private Label activeSessionLabel;
+    @FXML
+    private Label msgLabel;
 
-    @FXML private TableView<GradeRecord> gradeTable;
-    @FXML private TableColumn<GradeRecord, String> colName;
-    @FXML private TableColumn<GradeRecord, Double> colScore;
+    @FXML
+    private TableView<GradeRecord> gradeTable;
+    @FXML
+    private TableColumn<GradeRecord, String> colName;
+    @FXML
+    private TableColumn<GradeRecord, Double> colScore;
 
     private User currentUser;
     private ObservableList<GradeRecord> gradeList = FXCollections.observableArrayList();
@@ -117,7 +124,16 @@ public class GradeController {
         String year = SettingsDAO.getActiveYear();
 
         for (GradeRecord record : gradeList) {
+            // DEBUG PRINT: This will show in your IDE console!
+            System.out.println("SAVING GRADE -> Student ID: " + record.getStudentId() + " | Term: " + term + " | Year: " + year + " | Score: " + record.getScore());
+
             GradeDAO.saveGrade(record.getStudentId(), s.getId(), term, year, record.getScore(), currentUser.getId());
+
+            com.school.dao.AuditDAO.log(
+                    currentUser.getId(),
+                    "GRADE_UPDATE",
+                    "Saved " + s.getName() + " score for " + record.getStudentName() + " as " + record.getScore() + " (Term " + term + ")"
+            );
         }
 
         msgLabel.setText("Grades saved successfully!");

@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -30,12 +31,15 @@ public class DashboardController {
 
     private User currentUser;
 
+
+
     public void setCurrentUser(User user) {
         this.currentUser = user;
         welcomeLabel.setText(user.getUsername() + " (" + user.getRole() + ") ▾");
         buildMenu();
         showDashboard();
     }
+
 
     private boolean isAdmin() { return "ADMIN".equals(currentUser.getRole()); }
 
@@ -44,7 +48,11 @@ public class DashboardController {
         addMenuItem("Dashboard", this::showDashboard);
 
         if (isAdmin()) {
-            addMenuItem("Students", this::showStudents);
+            addMenuItem("Students", () -> loadView("/fxml/students.fxml", controller -> {
+                if (controller instanceof StudentsController) {
+                    ((StudentsController) controller).setCurrentUser(currentUser);
+                }
+            }));
             addMenuItem("Classes", this::showClasses);
             addMenuItem("Teachers", () -> loadView("/fxml/teachers.fxml", null));
             addMenuItem("Subjects", () -> loadView("/fxml/subjects.fxml", null));
@@ -69,7 +77,11 @@ public class DashboardController {
             }));
 
             addMenuItem("Settings", () -> loadView("/fxml/settings.fxml", null));
-            addMenuItem("User accounts", () -> loadView("/fxml/user_accounts.fxml", null));
+            addMenuItem("User accounts", () -> loadView("/fxml/user_accounts.fxml", controller -> {
+                if (controller instanceof UserAccountController) {
+                    ((UserAccountController) controller).setCurrentUser(currentUser);
+                }
+            }));
             addMenuItem("Audit Logs", () -> loadView("/fxml/audit_logs.fxml", null));
         } else {
             addMenuItem("My students", this::showMyStudents);
@@ -182,30 +194,34 @@ public class DashboardController {
             cards.getChildren().addAll(
                     createStatCard("Active Students", String.valueOf(totalStudents), "#3498db"),
                     createStatCard("Total Teachers", String.valueOf(totalTeachers), "#9b59b6"),
-                    createStatCard("Active Classes", String.valueOf(totalClasses), "#e67e22")
+                    createStatCard("Active Classes", String.valueOf(totalClasses), "#e67e22"),
+                    createStatCard("Term Billed", "$" + String.format("%.2f", billed), "#475569"),
+                    createStatCard("Term Collected", "$" + String.format("%.2f", collected), "#27ae60"),
+                    createStatCard("Outstanding", "$" + String.format("%.2f", outstanding), "#e74c3c")
             );
 
-            // --- NEW CHARTS ---
+            // --- CHARTS ---
             HBox chartsBox = new HBox(20);
             chartsBox.setPadding(new javafx.geometry.Insets(20, 0, 0, 0));
 
             // 1. Fee Pie Chart
             PieChart feeChart = new PieChart();
             feeChart.setTitle("Term Fee Collection");
-            feeChart.getData().add(new PieChart.Data("Collected ($" + (int)collected + ")", collected));
-            feeChart.getData().add(new PieChart.Data("Outstanding ($" + (int)outstanding + ")", outstanding));
+            feeChart.getData().add(new PieChart.Data("Collected", collected));
+            feeChart.getData().add(new PieChart.Data("Outstanding", outstanding));
             feeChart.setPrefWidth(400);
+            feeChart.setMinHeight(300);
 
-            // 2. Attendance Bar Chart (School-wide for current term)
+            // 2. Attendance Bar Chart
             CategoryAxis xAxis = new CategoryAxis();
             NumberAxis yAxis = new NumberAxis();
             BarChart<String, Number> attendanceChart = new BarChart<>(xAxis, yAxis);
             attendanceChart.setTitle("School Attendance Overview");
             attendanceChart.setLegendVisible(false);
             attendanceChart.setPrefWidth(500);
+            attendanceChart.setMinHeight(300);
 
             XYChart.Series<String, Number> series = new XYChart.Series<>();
-            // We need a quick DAO method for this (See Step 1 below)
             int[] attStats = com.school.dao.AttendanceDAO.getSchoolAttendanceStats();
             series.getData().add(new XYChart.Data<>("Present", attStats[0]));
             series.getData().add(new XYChart.Data<>("Absent", attStats[1]));
@@ -214,11 +230,18 @@ public class DashboardController {
 
             chartsBox.getChildren().addAll(feeChart, attendanceChart);
 
-            contentArea.setCenter(new VBox(15, heading, sessionLabel, cards, chartsBox));
+            VBox mainContainer = new VBox(15, heading, sessionLabel, cards, chartsBox);
+            VBox.setVgrow(chartsBox, javafx.scene.layout.Priority.ALWAYS);
 
-            contentArea.setCenter(new VBox(15, heading, sessionLabel, cards));
+            ScrollPane scrollPane = new ScrollPane(mainContainer);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setStyle("-fx-background-color: transparent;");
+
+            // ONLY THIS ONE SETCENTER SHOULD EXIST
+            contentArea.setCenter(scrollPane);
 
         } else {
+            // ... (Teacher Dashboard remains the same) ...
             // --- TEACHER DASHBOARD ---
             Label heading = new Label("My Classes");
             heading.getStyleClass().add("module-title");
@@ -270,13 +293,6 @@ public class DashboardController {
         return card;
     }
 
-    private void showPlaceholder(String title, String phase) {
-        Label heading = new Label(title);
-        heading.getStyleClass().add("module-title");
-        Label note = new Label("This module is built in " + phase + ".");
-        note.getStyleClass().add("module-note");
-        contentArea.setCenter(new VBox(8, heading, note));
-    }
     @FXML
     private void handleLogout() {
         try {

@@ -4,6 +4,10 @@
 <VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.school.controllers.TeacherController" spacing="10" style="-fx-padding: 10;">
     <Label text="Teacher Management" styleClass="module-title"/>
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 10 0;">
+        <Label text="Search Teacher:" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="searchField" promptText="Type name or email..." prefWidth="300"/>
+    </HBox>
     <TableView fx:id="teacherTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="colFirst" text="First Name" prefWidth="120"/>

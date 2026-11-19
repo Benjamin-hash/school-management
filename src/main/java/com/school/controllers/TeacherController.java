@@ -16,6 +16,8 @@ public class TeacherController {
     @FXML private Label msgLabel;
 
     private ObservableList<Teacher> list = FXCollections.observableArrayList();
+    @FXML private TextField searchField;
+    private javafx.collections.transformation.FilteredList<Teacher> filteredList;
 
     @FXML private void initialize() {
         colFirst.setCellValueFactory(cd -> new javafx.beans.property.SimpleStringProperty(cd.getValue().getFirstName()));
@@ -44,6 +46,21 @@ public class TeacherController {
             });
             return row;
         });
+
+        filteredList = new javafx.collections.transformation.FilteredList<>(list, p -> true);
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredList.setPredicate(teacher -> {
+                if (newValue == null || newValue.isEmpty()) return true;
+                String lowerCaseFilter = newValue.toLowerCase();
+                if (teacher.getFirstName().toLowerCase().contains(lowerCaseFilter)) return true;
+                if (teacher.getLastName().toLowerCase().contains(lowerCaseFilter)) return true;
+                if (teacher.getEmail() != null && teacher.getEmail().toLowerCase().contains(lowerCaseFilter)) return true;
+                return false;
+            });
+        });
+
+        teacherTable.setItems(filteredList);
+
         refresh();
     }
 

@@ -6,6 +6,11 @@
 
     <Label text="Fee Management" styleClass="module-title"/>
 
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Search Student:" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="searchField" promptText="Find a student..." prefWidth="300"/>
+    </HBox>
+
     <HBox spacing="15" alignment="CENTER_LEFT">
         <Label text="Class:"/>
         <ChoiceBox fx:id="classChoice" prefWidth="150"/>

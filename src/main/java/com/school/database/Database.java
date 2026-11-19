@@ -17,10 +17,7 @@ public class Database {
     private static Connection connection;
 
     public static Connection getConnection() throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            connection = DriverManager.getConnection(URL);
-        }
-        return connection;
+        return DriverManager.getConnection(URL);
     }
 
     public static void initialize() {

@@ -16,6 +16,11 @@ public class UserAccountController {
     @FXML private Label msgLabel;
 
     private ObservableList<User> userList = FXCollections.observableArrayList();
+    private User currentUser;
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+    }
 
     @FXML
     private void initialize() {
@@ -42,6 +47,10 @@ public class UserAccountController {
         }
 
         if (UserDAO.createAdmin(username, password)) {
+            if (currentUser != null) {
+                com.school.dao.AuditDAO.log(currentUser.getId(), "ADMIN_CREATE", "Created new admin account: " + username);
+            }
+
             msgLabel.setText("Admin account created successfully!");
             msgLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
             newUserField.clear();
@@ -71,6 +80,11 @@ public class UserAccountController {
         dialog.showAndWait().ifPresent(newPass -> {
             if (!newPass.trim().isEmpty()) {
                 UserDAO.resetPassword(selected.getId(), newPass.trim());
+
+                if (currentUser != null) {
+                    com.school.dao.AuditDAO.log(currentUser.getId(), "PASSWORD_RESET", "Reset password for user: " + selected.getUsername());
+                }
+
                 msgLabel.setText("Password updated successfully!");
                 msgLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
             }

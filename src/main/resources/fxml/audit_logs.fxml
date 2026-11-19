@@ -5,6 +5,7 @@
       fx:controller="com.school.controllers.AuditController" spacing="10" style="-fx-padding: 20;">
     <Label text="System Audit Logs" styleClass="module-title"/>
     <Label text="A secure record of all critical actions taken in the system." styleClass="module-note"/>
+
     <TableView fx:id="auditTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="colTime" text="Timestamp" prefWidth="150"/>
