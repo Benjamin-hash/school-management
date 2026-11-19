@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.school.controllers.LoginController"
-           stylesheets="@../css/style.css" style="-fx-background-color: #f8fafc;">
+           stylesheets="@../css/style.css.bak" style="-fx-background-color: #f8fafc;">
 
     <VBox alignment="CENTER" spacing="15.0" maxWidth="350" maxHeight="400"
           style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 20, 0, 0, 10);">

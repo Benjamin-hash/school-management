@@ -2,7 +2,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox alignment="CENTER" spacing="15.0" stylesheets="@../css/style.css"
+<VBox alignment="CENTER" spacing="15.0" stylesheets="@../css/style.css.bak"
       xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.school.controllers.ActivationController">
     <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>

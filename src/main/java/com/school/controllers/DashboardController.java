@@ -103,7 +103,20 @@ public class DashboardController {
     }
 
     private void addMenuItem(String label, Runnable action) {
-        Button btn = new Button(label);
+        // Add emojis based on the label name
+        String icon = "";
+        if (label.equals("Dashboard")) icon = "📊 ";
+        else if (label.equals("Students")) icon = "🎓 ";
+        else if (label.equals("Teachers")) icon = "\uD83D\uDC68\uD83C\uDFFF\u200D\uD83C\uDFEB ";
+        else if (label.equals("Classes")) icon = "\uD83D\uDCDA ";
+        else if (label.equals("Fees")) icon = "💰 ";
+        else if (label.equals("Settings")) icon = "⚙️ ";
+        else if (label.equals("Audit Logs")) icon = "🔒 ";
+        else if (label.equals("Report Cards")) icon = "\uD83D\uDD6E ";
+        else if (label.equals("Attendance")) icon = "✔\uFE0F ";
+        else icon = "• "; // Default dot for others
+
+        Button btn = new Button(icon + label);
         btn.getStyleClass().add("menu-btn");
         btn.setMaxWidth(Double.MAX_VALUE);
         btn.setOnAction(e -> {

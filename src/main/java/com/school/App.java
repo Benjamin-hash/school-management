@@ -1,5 +1,6 @@
 package com.school;
 
+import atlantafx.base.theme.*;
 import com.school.database.Database;
 import com.school.utils.LicenseManager;
 import javafx.application.Application;
@@ -12,6 +13,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        // Apply the AtlantaFX theme
+        Application.setUserAgentStylesheet(new CupertinoLight().getUserAgentStylesheet());
         Database.initialize();
         LicenseManager.initializeFirstRun();
 
