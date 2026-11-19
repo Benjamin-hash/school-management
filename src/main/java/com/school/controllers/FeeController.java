@@ -28,7 +28,7 @@ public class FeeController {
 
     @FXML
     private void initialize() {
-        feeTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        feeTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         String activeYear = SettingsDAO.getActiveYear();
         int activeTerm = SettingsDAO.getActiveTerm();
         activeSessionLabel.setText("Active Session: " + activeYear + " (Term " + activeTerm + ")");

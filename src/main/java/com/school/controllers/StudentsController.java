@@ -4,6 +4,7 @@ import com.school.dao.ClassDAO;
 import com.school.dao.StudentDAO;
 import com.school.models.SchoolClass;
 import com.school.models.Student;
+import com.school.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,7 +22,8 @@ public class StudentsController {
     @FXML private ChoiceBox<SchoolClass> classChoice;
 
     private ObservableList<Student> studentList = FXCollections.observableArrayList();
-
+    private User currentUser;
+    public void setCurrentUser(User user) { this.currentUser = user; }
     @FXML
     private void initialize() {
         colFirstName.setCellValueFactory(cd -> new javafx.beans.property.SimpleStringProperty(cd.getValue().getFirstName()));

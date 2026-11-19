@@ -32,7 +32,7 @@ public class ReportCardController {
 
     @FXML
     private void initialize() {
-        reportTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        reportTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
         String year = SettingsDAO.getActiveYear();
         int term = SettingsDAO.getActiveTerm();
         sessionLabel.setText("Report Card: " + year + " (Term " + term + ")");
