@@ -31,4 +31,4 @@ A comprehensive, commercial-grade desktop application built with **JavaFX** and 
 ### Run Locally
 1. Clone the repository:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/school-management-system.git
+   git clone https://github.com/Benjamin-hash/school-management-system.git
