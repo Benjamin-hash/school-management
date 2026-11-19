@@ -8,7 +8,6 @@ import com.school.models.SchoolClass;
 import com.school.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.print.PrinterJob;
 import javafx.scene.control.*;
@@ -18,21 +17,18 @@ public class FeeController {
 
     @FXML private ChoiceBox<SchoolClass> classChoice;
     @FXML private Label activeSessionLabel, msgLabel;
-    @FXML private TextField searchField; // For Search
     @FXML private TableView<FeeRecord> feeTable;
     @FXML private TableColumn<FeeRecord, String> colName, colStatus;
     @FXML private TableColumn<FeeRecord, Double> colDue, colPaid, colBalance;
 
     private User currentUser;
-
-    // THE FIX: Only ONE declaration of feeList
-    private final ObservableList<FeeRecord> feeList = FXCollections.observableArrayList();
-    private FilteredList<FeeRecord> filteredFees;
+    private ObservableList<FeeRecord> feeList = FXCollections.observableArrayList();
 
     public void setCurrentUser(User user) { this.currentUser = user; }
 
     @FXML
     private void initialize() {
+        feeTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         String activeYear = SettingsDAO.getActiveYear();
         int activeTerm = SettingsDAO.getActiveTerm();
         activeSessionLabel.setText("Active Session: " + activeYear + " (Term " + activeTerm + ")");
@@ -43,16 +39,7 @@ public class FeeController {
         colBalance.setCellValueFactory(cd -> new javafx.beans.property.SimpleObjectProperty<>(cd.getValue().getBalance()));
         colStatus.setCellValueFactory(cd -> new javafx.beans.property.SimpleStringProperty(cd.getValue().getStatus()));
 
-        // Setup Search Filter
-        filteredFees = new FilteredList<>(feeList, p -> true);
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredFees.setPredicate(fee -> {
-                if (newValue == null || newValue.isEmpty()) return true;
-                return fee.getStudentName().toLowerCase().contains(newValue.toLowerCase());
-            });
-        });
-
-        feeTable.setItems(filteredFees);
+        feeTable.setItems(feeList);
         classChoice.setItems(FXCollections.observableArrayList(ClassDAO.getAll()));
         classChoice.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> loadFees());
     }
@@ -63,7 +50,6 @@ public class FeeController {
 
         int term = SettingsDAO.getActiveTerm();
         String year = SettingsDAO.getActiveYear();
-        // THE FIX: Use feeList here
         feeList.setAll(FeeDAO.getFeesForClass(c.getId(), term, year));
         msgLabel.setText("");
     }
@@ -75,16 +61,10 @@ public class FeeController {
 
         int term = SettingsDAO.getActiveTerm();
         String year = SettingsDAO.getActiveYear();
-        int generated = FeeDAO.generateBillsForClass(c.getId(), term, year);
+        FeeDAO.generateBillsForClass(c.getId(), term, year);
         loadFees();
-
-        if (generated > 0) {
-            msgLabel.setText("Bills generated for " + c.getName() + "!");
-            msgLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
-        } else {
-            msgLabel.setText("No bills generated. Check Fee Setup for this level.");
-            msgLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
-        }
+        msgLabel.setText("Bills generated for " + c.getName() + "!");
+        msgLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
     }
 
     @FXML
@@ -113,18 +93,11 @@ public class FeeController {
                 if (amount > selected.getBalance()) amount = selected.getBalance();
 
                 FeeDAO.recordPayment(selected.getFeeId(), amount, currentUser.getId());
-
-                // --- AUDIT LOG ---
-                com.school.dao.AuditDAO.log(
-                        currentUser.getId(),
-                        "FEE_PAYMENT",
-                        "Recorded payment of $" + amount + " for " + selected.getStudentName() + ". Remaining: $" + (selected.getBalance() - amount)
-                );
-
                 loadFees();
-                msgLabel.setText("Payment recorded!");
+                msgLabel.setText("Payment of $" + amount + " recorded successfully!");
                 msgLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
 
+                // SHOW RECEIPT
                 showReceipt(selected, amount);
 
             } catch (NumberFormatException e) {
