@@ -52,9 +52,6 @@ public class HomeroomController {
 
         // 1. Update the class record
         ClassDAO.updateHomeroomTeacher(selectedClass.getId(), selectedTeacher.getId());
-        
-        // 2. Automatically assign them to ALL subjects for this class (Primary logic)
-        ClassSubjectDAO.assignTeacherToAllSubjects(selectedClass.getId(), selectedTeacher.getId());
 
         refreshTable();
         

@@ -37,6 +37,16 @@ public class ClassController {
 
         classTable.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldSelection, newSelection) -> fillForm(newSelection));
+
+        // After classTable.setItems(filteredList) or classTable.setItems(classList);
+        classTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                nameField.setText(newVal.getName());
+                levelField.setText(newVal.getLevel());
+                sectionField.setText(newVal.getSection());
+                orderField.setText(String.valueOf(newVal.getLevelOrder()));
+            }
+        });
     }
 
     private void refreshTable() { classList.setAll(ClassDAO.getAll()); }

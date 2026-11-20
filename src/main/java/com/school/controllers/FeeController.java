@@ -83,7 +83,7 @@ public class FeeController {
 
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Record Payment");
-        dialog.setHeaderText("Recording payment for: " + selected.getStudentName() + "\nOutstanding Balance: $" + selected.getBalance());
+        dialog.setHeaderText("Recording payment for: " + selected.getStudentName() + "\nOutstanding Balance: ₵" + selected.getBalance());
         dialog.setContentText("Enter Amount Paid:");
 
         dialog.showAndWait().ifPresent(input -> {
@@ -94,7 +94,7 @@ public class FeeController {
 
                 FeeDAO.recordPayment(selected.getFeeId(), amount, currentUser.getId());
                 loadFees();
-                msgLabel.setText("Payment of $" + amount + " recorded successfully!");
+                msgLabel.setText("Payment of ₵" + amount + " recorded successfully!");
                 msgLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
 
                 // SHOW RECEIPT
@@ -123,7 +123,7 @@ public class FeeController {
         Label date = new Label("Date: " + java.time.LocalDate.now());
         Label student = new Label("Student: " + fee.getStudentName());
         Label item = new Label("Term Fee Payment");
-        Label amount = new Label("Amount Paid: $" + String.format("%.2f", amountPaid));
+        Label amount = new Label("Amount Paid: ₵" + String.format("%.2f", amountPaid));
         amount.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
         Label balance = new Label("Remaining Balance: $" + String.format("%.2f", (fee.getBalance() - amountPaid)));
 

@@ -10,42 +10,74 @@ import com.school.models.Subject;
 import com.school.models.Teacher;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 public class ClassSubjectController {
     @FXML private TableView<ClassSubject> mapTable;
     @FXML private TableColumn<ClassSubject, String> colClass, colSubject, colTeacher;
-    @FXML private ChoiceBox<SchoolClass> classChoice;
-    @FXML private ChoiceBox<Subject> subjectChoice;
-    @FXML private ChoiceBox<Teacher> teacherChoice;
+    @FXML private ComboBox<SchoolClass> classChoice;
+    @FXML private ComboBox<Subject> subjectChoice;
+    @FXML private ComboBox<Teacher> teacherChoice;
+    @FXML private TextField searchField; // NEW
 
-    private ObservableList<ClassSubject> list = FXCollections.observableArrayList();
+    private final ObservableList<ClassSubject> list = FXCollections.observableArrayList();
+    private FilteredList<ClassSubject> filteredList;
 
-    @FXML private void initialize() {
+    @FXML
+    private void initialize() {
+        mapTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+
         colClass.setCellValueFactory(cd -> new javafx.beans.property.SimpleStringProperty(cd.getValue().getClassName()));
         colSubject.setCellValueFactory(cd -> new javafx.beans.property.SimpleStringProperty(cd.getValue().getSubjectName()));
         colTeacher.setCellValueFactory(cd -> new javafx.beans.property.SimpleStringProperty(cd.getValue().getTeacherName()));
 
-        mapTable.setItems(list);
+        // Setup Search
+        filteredList = new FilteredList<>(list, p -> true);
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredList.setPredicate(cs -> {
+                if (newValue == null || newValue.isEmpty()) return true;
+                String lowerCaseFilter = newValue.toLowerCase();
+                return cs.getClassName().toLowerCase().contains(lowerCaseFilter) ||
+                        cs.getSubjectName().toLowerCase().contains(lowerCaseFilter) ||
+                        cs.getTeacherName().toLowerCase().contains(lowerCaseFilter);
+            });
+        });
+
+        mapTable.setItems(filteredList);
+
         classChoice.setItems(FXCollections.observableArrayList(ClassDAO.getSecondaryClasses()));
         subjectChoice.setItems(FXCollections.observableArrayList(SubjectDAO.getAll()));
-
-        // NOTE: Teacher class needs a toString() method returning their name for this to display correctly!
         teacherChoice.setItems(FXCollections.observableArrayList(TeacherDAO.getAll()));
 
         refresh();
     }
 
-    private void refresh() { list.setAll(ClassSubjectDAO.getAll()); }
+    private void refresh() {
+        list.setAll(ClassSubjectDAO.getSecondaryAssignments());
+    }
 
-    @FXML private void handleAssign() {
+    @FXML
+    private void handleAssign() {
         if (classChoice.getValue() != null && subjectChoice.getValue() != null && teacherChoice.getValue() != null) {
             ClassSubjectDAO.assign(
                     classChoice.getValue().getId(),
                     subjectChoice.getValue().getId(),
                     teacherChoice.getValue().getId()
             );
+            refresh();
+            classChoice.setValue(null);
+            subjectChoice.setValue(null);
+            teacherChoice.setValue(null);
+        }
+    }
+
+    @FXML
+    private void handleRemove() {
+        ClassSubject selected = mapTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            ClassSubjectDAO.removeAssignment(selected.getId());
             refresh();
         }
     }

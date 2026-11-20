@@ -56,8 +56,10 @@ public class DashboardController {
             addMenuItem("Classes", this::showClasses);
             addMenuItem("Teachers", () -> loadView("/fxml/teachers.fxml", null));
             addMenuItem("Subjects", () -> loadView("/fxml/subjects.fxml", null));
-            addMenuItem("Assignments", () -> loadView("/fxml/class_subjects.fxml", null));
-            addMenuItem("Homeroom Setup", () -> loadView("/fxml/homeroom_assignment.fxml", null));
+            addMenuItem("JHS Class Setup", () -> loadView("/fxml/class_subjects.fxml", null));
+            addMenuItem("JHS Assignments", () -> loadView("/fxml/class_subjects.fxml", null));
+            addMenuItem("Primary Assignments", () -> loadView("/fxml/primary_subjects.fxml", null));
+            addMenuItem("Primary Class Setup", () -> loadView("/fxml/homeroom_assignment.fxml", null));
             /*// --- Modules for Admin ---
             addMenuItem("Attendance", this::showAttendance);
             addMenuItem("Grades", this::showGrades);*/
@@ -208,9 +210,9 @@ public class DashboardController {
                     createStatCard("Active Students", String.valueOf(totalStudents), "#3498db"),
                     createStatCard("Total Teachers", String.valueOf(totalTeachers), "#9b59b6"),
                     createStatCard("Active Classes", String.valueOf(totalClasses), "#e67e22"),
-                    createStatCard("Term Billed", "$" + String.format("%.2f", billed), "#475569"),
-                    createStatCard("Term Collected", "$" + String.format("%.2f", collected), "#27ae60"),
-                    createStatCard("Outstanding", "$" + String.format("%.2f", outstanding), "#e74c3c")
+                    createStatCard("Term Billed", "₵" + String.format("%.2f", billed), "#475569"),
+                    createStatCard("Term Collected", "₵" + String.format("%.2f", collected), "#27ae60"),
+                    createStatCard("Outstanding", "₵" + String.format("%.2f", outstanding), "#e74c3c")
             );
 
             // --- CHARTS ---
@@ -311,7 +313,7 @@ public class DashboardController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
             Stage stage = (Stage) menuBox.getScene().getWindow();
-            stage.setScene(new Scene(root, 1200, 800));
+            stage.setScene(new Scene(root, 1200, 700));
             stage.setTitle("School Management System - Login");
             stage.centerOnScreen();
         } catch (IOException e) {

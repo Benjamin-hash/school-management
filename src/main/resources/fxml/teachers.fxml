@@ -24,7 +24,10 @@
         <TextField fx:id="passField" promptText="Login Password" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
     </GridPane>
     <HBox spacing="10" alignment="CENTER_LEFT">
-        <Button text="Add Teacher &amp; Create Login" onAction="#handleAdd"/>
-        <Label fx:id="msgLabel" style="-fx-text-fill: green;"/>
+        <Button text="Add Teacher &amp; Create Login" onAction="#handleAdd" style="-fx-background-color: #3b82f6; -fx-text-fill: white;"/>
+        <Button text="Update Teacher" onAction="#handleUpdate" style="-fx-background-color: #f39c12; -fx-text-fill: white;"/>
+        <Button text="Delete Teacher" onAction="#handleDelete" style="-fx-background-color: #ef4444; -fx-text-fill: white;"/>
+        <Button text="Clear Form" onAction="#handleClear"/>
+        <Label fx:id="msgLabel" style="-fx-font-weight: bold;"/>
     </HBox>
 </VBox>

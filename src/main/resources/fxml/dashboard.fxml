@@ -22,10 +22,13 @@
     </top>
 
     <!-- SIDEBAR -->
+    <!-- SIDEBAR -->
     <left>
-        <VBox fx:id="menuBox" spacing="5" style="-fx-background-color: white; -fx-padding: 20 15 20 15; -fx-border-color: transparent #e2e8f0 transparent transparent; -fx-border-width: 0 1 0 0;" minWidth="220" maxWidth="220">
-            <!-- Menu items will be injected here by DashboardController -->
-        </VBox>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: white; -fx-border-color: transparent #e2e8f0 transparent transparent; -fx-border-width: 0 1 0 0;" minWidth="220" maxWidth="220">
+            <VBox fx:id="menuBox" spacing="5" style="-fx-background-color: white; -fx-padding: 20 15 20 15;">
+                <!-- Menu items will be injected here by DashboardController -->
+            </VBox>
+        </ScrollPane>
     </left>
 
     <!-- MAIN CONTENT AREA -->

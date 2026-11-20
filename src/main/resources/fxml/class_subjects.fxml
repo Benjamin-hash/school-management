@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.school.controllers.ClassSubjectController" spacing="10" style="-fx-padding: 10;">
-    <Label text="Class &amp; Subject Assignments" styleClass="module-title"/>
+      fx:controller="com.school.controllers.ClassSubjectController" spacing="15" style="-fx-padding: 20;">
+
+    <Label text="JHS Class &amp; Subject Assignments" styleClass="module-title"/>
+    <Label text="Assign specific secondary school teachers to subjects." styleClass="module-note"/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Search:" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="searchField" promptText="Search by class, subject, or teacher..." prefWidth="300"/>
+    </HBox>
+
     <TableView fx:id="mapTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="colClass" text="Class" prefWidth="150"/>
@@ -11,10 +20,16 @@
             <TableColumn fx:id="colTeacher" text="Teacher" prefWidth="200"/>
         </columns>
     </TableView>
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <ChoiceBox fx:id="classChoice"/>
-        <ChoiceBox fx:id="subjectChoice"/>
-        <ChoiceBox fx:id="teacherChoice"/>
-        <Button text="Assign" onAction="#handleAssign"/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #f8fafc; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #e2e8f0; -fx-border-radius: 8;">
+        <ComboBox fx:id="classChoice" prefWidth="150" promptText="Select Class"/>
+        <ComboBox fx:id="subjectChoice" prefWidth="180" promptText="Select Subject"/>
+        <ComboBox fx:id="teacherChoice" prefWidth="200" promptText="Select Teacher"/>
+
+        <Button text="Assign Subject" onAction="#handleAssign" style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-cursor: hand;"/>
+
+        <Pane HBox.hgrow="ALWAYS"/>
+
+        <Button text="Remove Selected" onAction="#handleRemove" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-cursor: hand;"/>
     </HBox>
 </VBox>

@@ -16,6 +16,14 @@ public class SubjectController {
     @FXML private void initialize() {
         colName.setCellValueFactory(cd -> new javafx.beans.property.SimpleStringProperty(cd.getValue().getName()));
         subjectTable.setItems(list);
+
+        // After subjectTable.setItems(filteredList) or subjectTable.setItems(list);
+        subjectTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                nameField.setText(newVal.getName());
+            }
+        });
+
         refresh();
     }
 
